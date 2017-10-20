@@ -1,28 +1,39 @@
-language: cpp
 sudo: required
 
-os:
-    - linux
+language: cpp
 
-compiler:
-    - clang
+sudo: false
 
-env:
-    - TARGET_CPU=x86 BUILD_CONFIGURATION=Debug
-##- TARGET_CPU=x86 BUILD_CONFIGURATION=Release
-    
+addons:
+  apt:
+    sources:
+      - llvm-toolchain-precise-3.7
+      - ubuntu-toolchain-r-test
+      - george-edison55-precise-backports
+    packages:
+      - clang-3.7
+      - g++-5
+      - gcc-5
+      - cmake
+      - cmake-data
 
-before_install:  
-  - sudo apt-add-repository "deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty-4.0 main"
-  - sudo apt-get update -qq
+install:
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew update ; brew install llvm ; brew outdated gcc || brew upgrade gcc ; brew outdated cmake || brew upgrade cmake ; fi
+  - if [ "$TRAVIS_OS_NAME" = "linux" -a "$CXX" = "g++" ]; then export CXX="g++-5" CC="gcc-5"; fi
+  - if [ "$TRAVIS_OS_NAME" = "linux" -a "$CXX" = "clang++" ]; then export CXX="clang++-3.7" CC="clang-3.7"; fi
+  - mkdir build
 
-install: 
-  - sudo apt-get install libboost-all-dev
-  - sudo apt-get install --allow-unauthenticated -qq clang++-4.0
-  - export CXX="clang++-4.0"
+before_script:
+  - cd build; cmake ../test/
 
 script:
-      - make 
-      - ./a.out word2.txt 300x300.grid.txt
-      - ls -l *.txt
-      - cat 300x300.words2.out.txt
+  - make all
+  - ./railway_test -s -r compact
+
+compiler:
+  - clang
+  - gcc
+
+os:
+  - linux
+  - osx
