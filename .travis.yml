@@ -24,8 +24,9 @@ install:
   - mkdir build
 
 before_script:
-  - cd build; cmake ../test/
-
+  - mkdir build
+  - cd build; cmake 
+  
 script:
   - make all
   - ./railway_test -s -r compact
