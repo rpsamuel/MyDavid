@@ -24,18 +24,13 @@ install:
   - mkdir build
 
 before_script:
-   - mkdir -p build
-   - cd build
-   - cmake -DCMAKE_BUILD_TYPE=Debug ..
-   - make -j8
    
-##ctest .         # make test- cd build; cmake 
 
-#script:
- # - ./Build.sh
- # - make all
-#  - ./railway_test -s -r compact
-
+script:
+ - make 
+ 
+ script: ./Build.sh
+ 
 compiler:
   - clang
   - gcc
