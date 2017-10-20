@@ -23,12 +23,14 @@ install:
   - if [ "$TRAVIS_OS_NAME" = "linux" -a "$CXX" = "clang++" ]; then export CXX="clang++-3.7" CC="clang-3.7"; fi
   - mkdir build
 
-#before_script:
-#   cd build
-#   cmake ..        # cmake .. -G "Visual Studio 10"    # for Visual Studio 2010
-#   cmake --build . # make
+before_script:
+   mkdir -p build
+   cd build
+   cmake -DCMAKE_BUILD_TYPE=Debug ..
+   make -j8
+   
 ##ctest .         # make test- cd build; cmake 
-  script: ./Build.sh
+
 #script:
  # - ./Build.sh
  # - make all
