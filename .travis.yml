@@ -1,0 +1,28 @@
+language: cpp
+sudo: required
+
+os:
+    - linux
+
+compiler:
+    - clang
+
+env:
+    - TARGET_CPU=x86 BUILD_CONFIGURATION=Debug
+##- TARGET_CPU=x86 BUILD_CONFIGURATION=Release
+    
+
+before_install:  
+  - sudo apt-add-repository "deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty-4.0 main"
+  - sudo apt-get update -qq
+
+install: 
+  - sudo apt-get install libboost-all-dev
+  - sudo apt-get install --allow-unauthenticated -qq clang++-4.0
+  - export CXX="clang++-4.0"
+
+script:
+      - make 
+      - ./a.out word2.txt 300x300.grid.txt
+      - ls -l *.txt
+      - cat 300x300.words2.out.txt
